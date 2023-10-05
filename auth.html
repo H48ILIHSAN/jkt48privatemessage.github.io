@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- framework -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
+        integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
+        crossorigin="anonymous"></script>
+    <!-- header -->
+    <title>JKT48 PRIVATE MESSAGE</title>
+    <div class="title">
+        <img style="width: 50%;" src="https://jkt48.primesse.me/_next/image?url=%2Fimages%2FLogo%402x.png&w=384&q=75">
+    </div>
+</head>
+
+<body>
+    <form>
+        <label for="email" class="form-label">Email Address</label>
+        <input type="email" class="form-control" id="email">
+        <label for="password" class="form-label">Password</label>
+        <div class="input-group" style="display: flex;">
+            <input type="password" class="form-control" id="password">
+            <button class="btn btn-light" type="button" id="togglePassword">
+                <i class="bi bi-eye-slash" id="toggleIcon"></i>
+            </button>
+        </div>
+        <div style="display: flex; margin-top: 50px;">
+            <button type="button" class="btn btn-primary" onclick="LOGIN()" style="margin-right: auto;">Login</button>
+            <a href="#" class="btn btn-success" tabindex="-1" role="button" aria-disabled="true">Refresh</a>
+        </div>
+    </form>
+</body>
+
+</html>
+
+<!-- script -->
+<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-auth.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js"
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-analytics.js"
+
+    let firebaseConfig
+    axios.get("./firebase.json").then(function(response) {
+        firebaseConfig = response
+    })
+
+    const app = initializeApp(firebaseConfig)
+    const analytics = getAnalytics(app)
+</script>
+<script>
+    const passwordInput = document.getElementById("password")
+    const toggleIcon = document.getElementById("toggleIcon")
+
+    document.getElementById("togglePassword").addEventListener("click", function () {
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            toggleIcon.classList.remove("bi-eye-slash");
+            toggleIcon.classList.add("bi-eye");
+        } else {
+            passwordInput.type = "password";
+            toggleIcon.classList.remove("bi-eye");
+            toggleIcon.classList.add("bi-eye-slash");
+        }
+    })
+
+    let email = document.getElementById("email").value
+    let password = document.getElementById("password").value
+    firebase.auth().signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            console.log(userCredential)
+        })
+        .catch((error) => {
+            alert(error.message)
+        });
+
+</script>
+
+<!-- style -->
+<link rel="stylesheet" href="./auth.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
+<link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
